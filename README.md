@@ -6,7 +6,7 @@ Clients send text processing tasks to a **controller**, which distributes them t
 
 ---
 
-## **Features**
+## Features
 
 * **Multithreading:** Controller handles multiple client connections simultaneously.
 * **Multiprocessing:** Worker processes handle multiple tasks in parallel using all CPU cores.
@@ -15,26 +15,31 @@ Clients send text processing tasks to a **controller**, which distributes them t
 * **Message broker:** Ensures reliable communication between controller and workers.
 * **Internode communication:** TCP/IP sockets connect all nodes.
 * **User input:** Clients can choose task type (`wordcount`, `linecount`, `palindrome`) and input text dynamically.
+* **Config-driven workers:** Workers load broker IP and port from a **worker_config.py** file for easier scaling and multi-machine deployment.
+* **Enhanced logging:** Workers and brokers provide detailed logs for distributed task execution, helping track tasks from submission to completion.
 
 ---
 
-## **Project Structure**
+## Project Structure
+
+
 
 ```
 text_cluster/
 │
-├── client.py        # User interface for submitting tasks
-├── controller.py    # Multithreaded server handling clients and broker communication
-├── broker.py        # Routes tasks and results between controller and workers
-├── worker.py        # Multiprocessing worker handling text tasks
-└── README.md        # Project documentation
+├── client.py # User interface for submitting tasks
+├── controller.py # Multithreaded server handling clients and broker communication
+├── broker.py # Routes tasks and results between controller and workers
+├── worker.py # Multiprocessing worker handling text tasks, config-driven
+├── worker_config.py # Configuration file for broker IP, port, and worker settings
+└── README.md # Project documentation
 ```
 
 ---
 
-## **Getting Started**
+## Getting Started
 
-### **Prerequisites**
+### Prerequisites
 
 * Python 3.8+
 * No external libraries required (uses `socket`, `threading`, `multiprocessing`, `pickle`, `uuid`)
@@ -107,6 +112,7 @@ madam
 3. Controller forwards the task to the **broker**, which queues it for workers.
 4. **Workers** fetch tasks from the broker, process them using a **multiprocessing pool**, and send results back.
 5. Broker sends results to the controller, which forwards them back to the client.
+6. Worker configuration is read from worker_config.py, enabling scalable and multi-node deployments.
 
 ---
 
@@ -115,6 +121,7 @@ madam
 * **wordcount** → Counts total words in the text.
 * **linecount** → Counts total lines in the text.
 * **palindrome** → Checks if the text is a palindrome (ignores spaces and punctuation).
+* 
 
 ---
 
@@ -123,6 +130,7 @@ madam
 * Designed to run on **one machine** for testing/demo purposes.
 * Each script simulates a separate node in a distributed system.
 * Fully demonstrates **multithreading, multiprocessing, interprocess communication, and message brokering**.
+* Logs provide insight into distributed task execution for debugging or demonstration.
 
 
 
