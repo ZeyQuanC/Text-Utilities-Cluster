@@ -121,7 +121,6 @@ madam
 * **wordcount** → Counts total words in the text.
 * **linecount** → Counts total lines in the text.
 * **palindrome** → Checks if the text is a palindrome (ignores spaces and punctuation).
-* 
 
 ---
 
