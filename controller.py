@@ -3,11 +3,11 @@ import socket
 import threading
 import pickle
 
-BROKER_HOST = '10.0.0.129'
+BROKER_HOST = '10.0.0.197'
 BROKER_PORT = 5001
 
 clients = {}  # client_id -> connection
-
+ 
 def handle_client(client_conn, client_addr, broker_conn):
     print(f"[Controller] Handling client {client_addr}")
     data = client_conn.recv(4096)

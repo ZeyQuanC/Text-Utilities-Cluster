@@ -25,16 +25,13 @@ def handle_controller():
 def handle_worker(conn):
     while True:
         try:
-            # Send a task to worker
             if not TASK_QUEUE.empty():
                 task = TASK_QUEUE.get()
                 conn.sendall(pickle.dumps(task))
-                # Wait for result
                 result_data = conn.recv(4096)
                 if result_data:
                     result = pickle.loads(result_data)
                     RESULT_QUEUE.put(result)
-                    # Send result to controller
                     if controller_conn:
                         controller_conn.sendall(pickle.dumps(result))
         except:
@@ -42,19 +39,21 @@ def handle_worker(conn):
 
 def broker_server():
     global controller_conn
+
     # Listen for controller
     controller_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    controller_sock.bind(('localhost', 5001))
+    controller_sock.bind(('0.0.0.0', 5001))   # FIXED
     controller_sock.listen(1)
     print("[Broker] Waiting for controller...")
     controller_conn, _ = controller_sock.accept()
     print("[Broker] Controller connected.")
+
     threading.Thread(target=handle_controller, daemon=True).start()
 
     # Listen for workers
     worker_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    worker_sock.bind(('localhost', 5002))
-    worker_sock.listen(3)
+    worker_sock.bind(('0.0.0.0', 5002))       # FIXED
+    worker_sock.listen(10)
     print("[Broker] Waiting for workers...")
 
     while True:
